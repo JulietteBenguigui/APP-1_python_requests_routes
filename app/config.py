@@ -14,4 +14,3 @@ def to_bool(s):
 
 class Config():
     DEBUG = to_bool(os.environ.get("DEBUG"))
-    VERSION = os.environ.get("VERSION")
