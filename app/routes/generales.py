@@ -9,8 +9,16 @@ def index():
     return "Ajouter '/retrieve_wikidata/<string:id>' au chemin pour récupérer des items Wikidata au format JSON"
 
 @app.route("/retrieve_wikidata/<string:id>")
-def retrieve_wikidata(id):
-    base_url = "https://www.wikidata.org/wiki/Special:EntityData"  # FIXME: À externaliser ?
+def retrieve_wikidata(id: int):
+    """ Requête le site wikidata.org et récupère le code HTTP, de type de contenu de la ressource ainsi que le contenu JSON s'il existe. 
+
+    Args:
+        id: identifiant unique Wikidata de la ressource
+
+    Returns:
+        render_template(): fonction permettant de passer des variables construites dans la route à un templates HTML
+    """
+    base_url = "https://www.wikidata.org/wiki/Special:EntityData"  # À externaliser ?
     json = None  # Initialisation de la variable json pour éviter les UnboundLocalError dans le cas ou l'identifiant renseigné est invalide.
 
     try:
