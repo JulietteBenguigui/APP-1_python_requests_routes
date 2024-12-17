@@ -2,13 +2,33 @@ from ..app import app
 import requests
 from flask import render_template
 
+
+# Index
+@app.route("/")
+def index():
+    return "Ajouter '/retrieve_wikidata/<string:id>' au chemin pour récupérer des items Wikidata au format JSON"
+
 @app.route("/retrieve_wikidata/<string:id>")
 def retrieve_wikidata(id):
-    base_url = "https://www.wikidata.org/wiki/Special:EntityData" # FIXME à mettre ailleurs ?
-    response = requests.get(f"{base_url}/{id}.json")
-    # Création des 3 objets appelés dans le template HTML grâce à Jinja
-    status_code = response.status_code
-    content = response.headers.get("Content-Type")
-    check_type = type(response.json())
-    json = response.json()
-    return render_template("pages/display_wikidata_content.html", id=id, status_code = status_code, content=content, json=json, check_type=check_type)
+    base_url = "https://www.wikidata.org/wiki/Special:EntityData"  # FIXME: À externaliser ?
+    json = None  # Initialisation de la variable json pour éviter les UnboundLocalError dans le cas ou l'identifiant renseigné est invalide.
+
+    try:
+        response = requests.get(f"{base_url}/{id}.json")
+        status_code = response.status_code  # Récupération du code HTTP
+        content = response.headers.get("Content-Type")  # Récupération du Content-Type
+
+        if status_code == 200 and content.startswith("application/json") == True:
+            json = response.json()  # Si la requête est réussie et qu'il s'agit bien de contenu au format JSON, on transforme la variable en objet python JSON (dict) 
+
+    except Exception as e:
+        print(f"Erreur lors de la récupération des données : {e}") 
+
+    # Passage des variables valides vers le template HTML
+    return render_template(
+        "pages/display_wikidata_content.html",
+        id=id,
+        status_code=status_code,
+        content=content,
+        json=json
+    )

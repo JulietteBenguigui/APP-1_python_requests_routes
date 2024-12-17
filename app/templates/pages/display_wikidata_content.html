@@ -24,14 +24,12 @@
     </div>
     <div class="container">
         <h2>Données de l'entité</h2>
-        {%if check_type == dict}
-            <p>{{json}}</p>
-        {%else%}
-            <p>Aucune donnée valide n'a été retournée pour l'ID "id"</p>
-        {%endif%}
+        {% if json %}
+        <pre>{{ json | tojson(indent=2) }}</pre>
+    {% else %}
+        <p><strong>Aucune donnée valide n'a été retournée pour l'ID "{{id}}"</strong></p>
+    {% endif %}
     </div>
-
-
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
