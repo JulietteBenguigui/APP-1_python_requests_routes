@@ -18,10 +18,17 @@
         <h2>Informations sur la requête</h2>
         <p><strong>Code HTTP : </strong>{{status_code}}</p>
         <p><strong>Type de contenu : </strong>{{content}}</p>
+        
+    </div>
+
     </div>
     <div class="container">
         <h2>Données de l'entité</h2>
-        <p>{{json}}</p>
+        {%if check_type == dict}
+            <p>{{json}}</p>
+        {%else%}
+            <p>Aucune donnée valide n'a été retournée pour l'ID "id"</p>
+        {%endif%}
     </div>
 
 
